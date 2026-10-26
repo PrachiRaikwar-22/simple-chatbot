@@ -16,9 +16,24 @@ st.markdown("Learn Langchain basics with Groq's ultra-fast inference")
 with st.sidebar:
     st.header("Settings")
 
-    #API key
-    api_key=st.text_input("GROQ API KEY",type="password",help="GET free API key at console.groq.com")
+    # 2. Determine default key from Secrets or Environment Variables
+    default_key = ""
+    if "GROQ_API_KEY" in st.secrets:
+       default_key = st.secrets["GROQ_API_KEY"]
+    else:
+       default_key = os.getenv("GROQ_API_KEY", "")
 
+# 3. Create the password input field (pre-filled with the secret if available)
+    api_key = st.text_input(
+    "GROQ API KEY",
+    value=default_key,
+    type="password",
+    help="Get a free API key at console.groq.com",)
+
+# 4. Check if the key is provided before running the app
+    if not api_key:
+      st.warning("⚠️ Please enter your Groq API key to proceed.")
+      st.stop()
     #Model selection
     model_name=st.selectbox(
         "Model",["openai/gpt-oss-120b","meta-llama/llama-prompt-guard-2-22m"]
