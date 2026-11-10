@@ -1,11 +1,14 @@
+   
 import streamlit as st
 from langchain.chat_models import init_chat_model
 from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
+from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate,MessagesPlaceholder
 from langchain_core.messages import HumanMessage,AIMessage # AIMessage : message by llm 
 import os
 
+load_dotenv()
 ## Page config
 st.set_page_config(page_title="Simple Langchain Chatbot with Groq 🚀",page_icon="🚀")
 
@@ -14,31 +17,25 @@ st.title("🚀 Simple Langchain Chat with Groq")
 st.markdown("Learn Langchain basics with Groq's ultra-fast inference")
 
 with st.sidebar:
-    st.header("Settings")
-
-    # 2. Determine default key from Secrets or Environment Variables
-    default_key = ""
-    if "GROQ_API_KEY" in st.secrets:
-       default_key = st.secrets["GROQ_API_KEY"]
-    else:
-       default_key = os.getenv("GROQ_API_KEY", "")
-
-# 3. Create the password input field (pre-filled with the secret if available)
-    api_key = st.text_input(
-    "GROQ API KEY",
-    value=default_key,
-    type="password",
-    help="Get a free API key at console.groq.com",)
-
-# 4. Check if the key is provided before running the app
+    st.title("⚙️ Settings")
+    st.caption("Configure your model and chat options")
+    st.divider()
+   
+    #API key
+    api_key=os.getenv("GROQ_API_KEY")
     if not api_key:
-      st.warning("⚠️ Please enter your Groq API key to proceed.")
-      st.stop()
+        print("api key not found..........")
     #Model selection
     model_name=st.selectbox(
-        "Model",["openai/gpt-oss-120b","meta-llama/llama-prompt-guard-2-22m"]
-        ,index=0
-        )
+        "Model", 
+        ["openai/gpt-oss-120b","qwen/qwen3.8-27b"], 
+        index=0
+    )
+    st.divider()
+
+    if st.button("New Chat"):
+            st.session_state.messages=[]
+            st.rerun()
     #clear button
     if st.button("Clear Chat"):
         st.session_state.messages=[]
@@ -65,11 +62,6 @@ def get_chain(api_key,model_name):
              temperature=0.7,
              streaming=True)
     
-    #Chat prompt template
-    # prompt=ChatPromptTemplate.from_messages([
-    #     ("system","You are a helpful assistant powered by Groq. Answer questions clearly and concisely"),
-    #     ("user","{question}")
-    # ])
     prompt = ChatPromptTemplate.from_messages([
     ("system", "You are a helpful assistant. Answer clearly."),
     MessagesPlaceholder(variable_name="history"),
@@ -82,8 +74,8 @@ def get_chain(api_key,model_name):
 ##get chain 
 chain=get_chain(api_key,model_name)
 if not chain:
-    st.warning("Please enter your Groq API key in the sidebar to start chatting !")
-    st.markdown("[Get your free API key here](https://console.groq.com)")
+    st.warning("Please select your model from left sidebar!")
+    # st.markdown("[Get your free API key here](https://console.groq.com)")
 else:
     #display the chat message
     for mssg in st.session_state.messages:
@@ -101,7 +93,7 @@ else:
         #add user message to session state
         st.session_state.messages.append({"role":"user","content":question})
         #display
-        with st.chat_message("user"):
+        with  st.chat_message("user"):
             st.write(question)
 
 
@@ -111,15 +103,7 @@ else:
             full_response=""
 
             try:
-                #stream response from groq
-
-                # this is same as following this is list comprehension 
-            #    history = [                         
-            #    HumanMessage(content=m["content"])
-            #    if m["role"] == "user"
-            #    else AIMessage(content=m["content"])
-            #    for m in st.session_state.messages[:-1]
-            #    ]
+                
                 history = []
 
                 for m in st.session_state.messages[:-1]:
@@ -133,11 +117,7 @@ else:
                   "question": question}):
                    full_response += chunk
                    mssg_placeholder.markdown(full_response)
-                # for chunk in chain.stream({"question":question}):
-                #     full_response+=chunk
-                #     mssg_placeholder.markdown(full_response + "")
-                # mssg_placeholder.markdown(full_response)
-
+                
                 #ADD to history
                 st.session_state.messages.append({"role":"assistant","content":full_response})
             except Exception as e:
@@ -145,15 +125,29 @@ else:
 
 
 #Examples
-st.markdown("-------")
-st.markdown("### Try these examples")
-col1,col2=st.columns(2)
-with col1:
-    st.markdown("-What is Langchain?")
-    st.markdown("-Explain Groq's LPU technique")
-with col2:
-    st.markdown("-How do I learn programming?")
-    st.markdown("-Write a haiku about AI")
-#Footer s
-st.markdown("---")
-st.markdown("Built with Langchain & Groq | Experience the speed! ⚡")    
+if len(st.session_state.messages)==0:
+    _, center_col, _ = st.columns([1, 4, 1])
+    with center_col:
+      st.markdown("<h2 style='text-align: center;'>How can I help you today?</h2>", unsafe_allow_html=True)
+      st.markdown("<p style='text-align: center; color: gray;'>Powered by Langchain & Groq ultra-fast inference</p>", unsafe_allow_html=True)
+    
+    st.write("") # Generates intentional layout spacing
+    st.write("") 
+
+# 2. Modern 2x2 Grid Prompt Layout using native columns
+    col1, col2 = st.columns(2)
+
+    with col1:
+     if st.button("💡 Explain a concept\n\nWhat is Langchain and how does it work?", use_container_width=True):
+        st.session_state.chat_input_value = "What is Langchain and how does it work?"
+        st.rerun()
+        
+     if st.button("🚀 Analyze architecture\n\nExplain Groq's LPU hardware technique", use_container_width=True):
+        st.session_state.chat_input_value = "Explain Groq's LPU hardware technique"
+
+    with col2:
+     if st.button("💻 Write & debug code\n\nHelp me learn backend programming step-by-step", use_container_width=True):
+        st.session_state.chat_input_value = "Help me learn backend programming step-by-step"
+        
+     if st.button("📝 Brainstorm ideas\n\nWrite a creative haiku about artificial intelligence", use_container_width=True):
+        st.session_state.chat_input_value = "Write a creative haiku about artificial intelligence"
