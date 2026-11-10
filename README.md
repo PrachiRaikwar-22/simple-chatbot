@@ -1,113 +1,175 @@
-# 🤖 Simple AI Chatbot | LLM-Powered Conversational App
+# 🚀 Simple LangChain Chatbot with Groq
 
-A lightweight conversational AI application built with **Python, Streamlit, LangChain, and Groq**. The chatbot enables users to interact with a Large Language Model (LLM) through a clean web interface, demonstrating the fundamentals of LLM integration, prompt engineering, and conversational context management.
+A simple, interactive AI chatbot built using **Streamlit, LangChain, and Groq**. It allows users to interact with Large Language Models (LLMs), maintain conversational context, switch between AI models, and receive responses in real time through streaming.
 
-## ✨ Key Features
+This project demonstrates the fundamentals of LangChain, including prompt templates, conversation history, LLM integration, and output parsing.
 
-- **Interactive Chat Interface:** Communicate with the AI through a simple, user-friendly web application.
-- **LLM Integration:** Generate responses using a language model accessed through the Groq API.
-- **Conversation History:** Maintain previous messages and provide conversational context to the model.
-- **Prompt Management:** Use LangChain prompt templates to structure model interactions.
-- **Real-Time Interaction:** Display AI responses directly in the Streamlit application.
-- **Secure Configuration:** Keep API credentials separate from source code using environment variables.
+## ✨ Features
+
+- **Conversational AI:** Interact with an AI assistant that remembers previous messages within the session.
+- **Multiple Models:** Switch between available Groq models.
+- **Real-Time Streaming:** Receive AI responses as they are generated.
+- **Chat History:** Maintains conversation history using Streamlit session state.
+- **New Chat:** Start a fresh conversation.
+- **Clear Chat:** Clear existing conversation history.
+- **Interactive Interface:** Clean Streamlit UI with a sidebar for model selection and suggested prompts.
 
 ## 🛠️ Tech Stack
 
-| Technology | Purpose |
-|---|---|
-| Python | Core application logic |
-| Streamlit | Interactive web interface |
-| LangChain | LLM integration and prompt management |
-| Groq API | Access to a supported language model |
+- **Python** – Core programming language
+- **Streamlit** – Interactive web interface
+- **LangChain** – LLM orchestration and prompt management
+- **Groq API** – Fast LLM inference
+- **ChatGroq** – Integration with Groq-hosted models
+- **python-dotenv** – Environment variable management
 
-## 🏗️ How It Works
-
-1. The user enters a message through the Streamlit chat interface.
-2. The application collects relevant conversation history.
-3. LangChain prepares the messages and sends them to the configured language model through Groq.
-4. The model generates a response.
-5. The application displays the response and updates the conversation history.
-
-## 📁 Project Structure
+## 📂 Project Structure
 
 ```text
-simple-chatbot/
-├── app.py              # Main application
-├── requirements.txt    # Python dependencies
-├── .gitignore          # Excluded files and secrets
-└── README.md           # Project documentation
+Simple-LangChain-Chatbot/
+│
+├── app.py
+├── requirements.txt
+├── .env
+├── .gitignore
+└── README.md
 ```
 
-## 🚀 Getting Started
+## ⚙️ Installation & Setup
 
-### Prerequisites
-
-- Python installed on your system
-- A Groq API key
-- Git
-
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/PrachiRaikwar-22/simple-chatbot.git
-cd simple-chatbot
+git clone https://github.com/your-username/Simple-LangChain-Chatbot.git
 ```
 
-### 2. Create and activate a virtual environment
+### 2. Navigate to the Project Directory
 
 ```bash
-python -m venv .venv
+cd Simple-LangChain-Chatbot
 ```
 
-On Windows PowerShell:
+### 3. Create a Virtual Environment
 
-```powershell
-.\.venv\Scripts\Activate.ps1
+```bash
+python -m venv venv
 ```
 
-### 3. Install dependencies
+Activate the environment:
+
+**Windows:**
+```bash
+venv\Scripts\activate
+```
+
+**Mac/Linux:**
+```bash
+source venv/bin/activate
+```
+
+### 4. Install Dependencies
+
+All required Python packages and dependencies are listed in the `requirements.txt` file.
+
+Install them using:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure your API key
+### 5. Configure Groq API Key
 
-Set the `GROQ_API_KEY` environment variable to your own API key. You can obtain one through the [Groq Console](https://console.groq.com/).
+Get your API key from [Groq Console](https://console.groq.com/keys).
 
-Never commit API keys or files containing secrets to GitHub.
+Create a `.env` file in the root directory and add:
 
-### 5. Launch the application
+```env
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+**Note:** Keep your API key private. Never upload your `.env` file to GitHub.
+
+### 6. Run the Application
+
+Start the Streamlit application using:
 
 ```bash
 streamlit run app.py
 ```
 
-Open the local URL displayed in your terminal to start chatting.
+The chatbot will open in your default web browser.
 
-## 🧠 Key Learnings
+## 🧠 LangChain Concepts Implemented
 
-Through this project, I explored:
+This project explores the following LangChain concepts:
 
-- Integrating LLM APIs into Python applications.
-- Using LangChain for model initialization and prompt management.
-- Passing conversation history as context for generating responses.
-- Building interactive AI applications using Streamlit.
-- Managing Python dependencies and API credentials securely.
+**1. ChatGroq**
 
-## 🔮 Future Enhancements
+Connects the application to Groq-hosted language models.
 
-- Add more robust error handling and API failure recovery.
-- Support configurable models and generation parameters.
-- Improve conversation management and the user interface.
-- Deploy the application for public access.
+**2. ChatPromptTemplate**
+
+Defines the structure of messages sent to the LLM, including system instructions, conversation history, and the current user question.
+
+**3. MessagesPlaceholder**
+
+Dynamically inserts previous conversation messages into the prompt to maintain conversational context.
+
+**4. HumanMessage & AIMessage**
+
+Represent user messages and AI-generated responses in the conversation history.
+
+**5. LCEL (LangChain Expression Language)**
+
+Connects different LangChain components using the pipe operator.
+
+```python
+chain = prompt | llm | StrOutputParser()
+```
+
+**6. StrOutputParser**
+
+Converts the language model output into a string.
+
+**7. Streaming**
+
+Uses `chain.stream()` to generate and display responses incrementally.
+
+**8. Streamlit Session State**
+
+Maintains conversation history across Streamlit application reruns.
+
+**9. Cache Resource**
+
+Uses `@st.cache_resource` to reuse the initialized LangChain chain instead of recreating it on every rerun.
+
+## 🖥️ Application Preview
+
+Add your application screenshot to the repository and display it here:
+
+```markdown
+![Chatbot Preview](assets/chatbot-preview.png)
+```
+
+## 🔮 Future Improvements
+
+- Add persistent chat history using a database.
+- Support PDF document uploads and question answering.
+- Add conversation export functionality.
+- Introduce customizable system prompts.
+- Improve error handling and API status feedback.
 
 ## 👩‍💻 Author
 
-**Prachi Raikwar**  
+**Prachi Raikwar**
 
-- GitHub: [@PrachiRaikwar-22](https://github.com/PrachiRaikwar-22)
+B.Tech CSE (AI & ML) Student
+
+- GitHub: [PrachiRaikwar-22](https://github.com/PrachiRaikwar-22)
+- LinkedIn: [Prachi Raikwar](https://www.linkedin.com/in/prachi-raikwar-911526330/)
 
 ---
+
+⭐ If you find this project useful, consider giving it a star!
 
 *Built to explore the practical foundations of conversational AI and LLM-powered application development.*
