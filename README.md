@@ -2,7 +2,8 @@
 
 A simple, interactive AI chatbot built using **Streamlit, LangChain, and Groq**. It allows users to interact with Large Language Models (LLMs), maintain conversational context, switch between AI models, and receive responses in real time through streaming.
 
-This project demonstrates the fundamentals of LangChain, including prompt templates, conversation history, LLM integration, and output parsing.
+I built this project to understand how LangChain works with LLMs and how to create a chatbot that can remember previous conversations.
+
 ## 🚀 Live Demo
 Try the chatbot here:https://prachi-simple-chatbot.streamlit.app/
 
@@ -83,6 +84,7 @@ pip install -r requirements.txt
 
 ### 5. Configure Groq API Key
 
+
 Get your API key from [Groq Console](https://console.groq.com/keys).
 
 Create a `.env` file in the root directory and add:
@@ -105,7 +107,7 @@ The chatbot will open in your default web browser.
 
 ## 🧠 LangChain Concepts Implemented
 
-This project explores the following LangChain concepts:
+While building this chatbot, I learned and implemented the following LangChain concepts:
 
 **1. ChatGroq**
 
