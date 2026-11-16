@@ -151,11 +151,13 @@ Uses `@st.cache_resource` to reuse the initialized LangChain chain instead of re
 
 ## 🖥️ Application Preview
 
-Add your application screenshot to the repository and display it here:
+### 1. Chatbot Interface
 
-```markdown
-![Chatbot Preview](assets/chatbot-preview.png)
-```
+![Chatbot Interface](assets/chatbot_interface.png)
+
+### 2. Chat Conversation
+
+![Chatbot Conversation](assets/chatbot_conversation.png)
 
 ## 🔮 Future Improvements
 
